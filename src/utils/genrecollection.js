@@ -1,3 +1,10 @@
-export const genres=[
-    'All','Comedy','News','Education','Songs','Entertainment','Romance','Dance','Sports','Fashion'
-]
+export const genres = [
+  "All",
+  "Music",
+  "Gaming",
+  "Programming",
+  "Technology",
+  "News",
+  "Sports",
+  "Entertainment",
+];

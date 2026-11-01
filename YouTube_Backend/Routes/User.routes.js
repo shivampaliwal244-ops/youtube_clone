@@ -1,11 +1,11 @@
 import { login, register } from "../Controller/User.controller.js";
 
 
-export function userRoutes(app){
-    app.post('/register',(req,res)=>{
-        register(req,res)
-    });
-    app.post('/login',(req,res)=>{
-        login(req,res)
-    })
+export function userRoutes(app) {
+    app.post("/api/auth/register", register);
+    app.post("/api/auth/login", login);
+
+    // Backwards-compatible aliases used by the original frontend.
+    app.post("/register", register);
+    app.post("/login", login);
 }

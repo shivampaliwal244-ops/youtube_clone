@@ -1,10 +1,19 @@
-#img-size{
-    height: 12.4rem;
-    width: 100%;
-}
-@media (max-width:419px) {
-    
-    #img-size{
-        height: 10.3rem;
-    }
+.video-card { color: #f1f1f1; min-width: 0; }
+.video-thumbnail-link { aspect-ratio: 16 / 9; background: #181818; border-radius: 12px; display: block; overflow: hidden; position: relative; }
+.video-thumbnail { height: 100%; object-fit: cover; transition: transform 180ms ease; width: 100%; }
+.video-thumbnail-link:hover .video-thumbnail { transform: scale(1.025); }
+.video-source { background: #111d; border-radius: 4px; bottom: 0.5rem; color: #fff; font-size: 0.7rem; padding: 0.2rem 0.4rem; position: absolute; right: 0.5rem; }
+.video-card-info { display: flex; gap: 0.7rem; padding-top: 0.7rem; }
+.channel-avatar { align-items: center; background: #333; border-radius: 50%; color: #ddd; display: flex; flex: 0 0 38px; height: 38px; justify-content: center; }
+.video-card-copy { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.video-title { -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: #f1f1f1; display: -webkit-box; font-size: 0.96rem; font-weight: 650; line-height: 1.35; overflow: hidden; }
+.video-title:hover { color: #fff; }
+.video-channel, .video-metadata { color: #aaa; font-size: 0.8rem; }
+.video-metadata { align-items: center; display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.metadata-dot { font-size: 1rem; line-height: 0.8; }
+
+@media (max-width: 500px) {
+  .video-thumbnail-link { border-radius: 9px; }
+  .video-card-info { padding-top: 0.55rem; }
+  .video-title { font-size: 0.92rem; }
 }

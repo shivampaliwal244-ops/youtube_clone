@@ -1,54 +1,28 @@
-@media (max-width:1055px) {
-    #content{
-        width: 60%;
-        font-size: 0.8rem;
-    }
-    
-}
-@media (max-width:885px) {
-    #content{
-        width: 70%;
-        font-size: 0.8rem;
-    }
-    
-}
-@media (max-width:885px) {
-    #content{
-        width: 60%;
-        font-size: 0.8rem;
-    }
-    
-}
-@media (max-width:500px) {
-    #content{
-        width: 55%;
-        font-size: 0.6rem;
-    }
-    #name-sec{
-        font-size: 0.8rem;
-    }
-    #delete-btn,#edit_btn{
-        font-size: 0.8rem;
-        
-    }
-    #btn{
-        align-items: center;
-  font-size: 0.8rem;
-    }
-    
-}
-@media (max-width:417px) {
-    #content{
-        width: 45%;
-        font-size: 0.4rem;
-    }
-    #delete-btn,#edit_btn{
-        font-size: 0.8rem;
-        
-    }
-    #btn{
-        align-items: center;
-  font-size: 0.8rem;
-    }
-    
-}
+.comments-panel { color: #f1f1f1; margin: 1.5rem 0; }
+.comments-panel h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; }
+.comment-form { align-items: flex-start; display: flex; gap: 0.7rem; margin-bottom: 1.2rem; }
+.comment-form textarea, .comment-edit textarea { background: transparent; border: 0; border-bottom: 1px solid #555; color: #f1f1f1; flex: 1; min-width: 0; outline: 0; padding: 0.6rem 0.2rem; resize: vertical; }
+.comment-form textarea:focus, .comment-edit textarea:focus { border-color: #f1f1f1; }
+.comment-form button, .comment-edit button { background: #f1f1f1; border: 0; border-radius: 999px; color: #111; cursor: pointer; font-weight: 700; padding: 0.55rem 1rem; }
+.comment-form button:disabled { cursor: not-allowed; opacity: 0.5; }
+.comment-form button:hover:not(:disabled), .comment-edit button:hover { background: #ddd; }
+.comment-signin, .comment-status { color: #aaa; font-size: 0.88rem; margin: 1rem 0; }
+.comment-signin a { color: #9ac7ff; text-decoration: underline; }
+.comment-error { color: #ff9999; font-size: 0.86rem; margin: 0.6rem 0; }
+.comment-list { display: flex; flex-direction: column; gap: 1.2rem; }
+.comment-item { align-items: flex-start; display: flex; gap: 0.8rem; }
+.comment-avatar { align-items: center; background: #393939; border-radius: 50%; color: #eee; display: flex; flex: 0 0 36px; font-weight: 700; height: 36px; justify-content: center; }
+.comment-body { min-width: 0; width: 100%; }
+.comment-meta { align-items: baseline; display: flex; flex-wrap: wrap; gap: 0.55rem; margin-bottom: 0.3rem; }
+.comment-meta strong { font-size: 0.85rem; }
+.comment-meta span { color: #aaa; font-size: 0.75rem; }
+.comment-body > p { font-size: 0.88rem; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-wrap; }
+.comment-actions { display: flex; gap: 0.8rem; margin-top: 0.5rem; }
+.comment-actions button { background: transparent; border: 0; color: #bbb; cursor: pointer; font-size: 0.78rem; font-weight: 700; padding: 0.2rem 0; }
+.comment-actions button:hover { color: #fff; }
+.comment-actions button:last-child:hover { color: #ff9999; }
+.comment-edit { display: flex; flex-direction: column; gap: 0.7rem; }
+.comment-edit > div { display: flex; gap: 0.5rem; }
+.comment-edit button.secondary { background: transparent; color: #eee; }
+
+@media (max-width: 500px) { .comment-form { flex-direction: column; } .comment-form button { align-self: flex-end; } }

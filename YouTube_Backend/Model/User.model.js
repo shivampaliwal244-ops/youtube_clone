@@ -4,15 +4,23 @@ const {Schema} =mongoose;
 let userSchema=new Schema({
     userName:{
         type:String,
-        required:true
+        required:true,
+        trim:true,
+        minlength:2,
+        maxlength:60
     },
     userEmail:{
         type:String,
-        required:true
+        required:true,
+        trim:true,
+        lowercase:true,
+        maxlength:254
     },
     userPassword:{
         type:String,
-        required:true
+        required:true,
+        minlength:1,
+        maxlength:100
     }
 
 })

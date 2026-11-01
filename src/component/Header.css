@@ -1,222 +1,65 @@
-#youtube-head{
-     font-family: "Roboto", sans-serif;
-}
-@media (max-width:1057px){
-    .sec-2{
-        width: 45%;
-        height: 2.2rem;
-    }
-}
-@media (max-width:963px){
-    #img-id{
-        width: 30px;
-        height: 24px;
-    }
-    #youtube-head{
-        font-size: 1.2rem;
-    }
+.app-header {
+  align-items: center;
+  background: #0f0f0f;
+  border-bottom: 1px solid #212121;
+  color: #f1f1f1;
+  display: flex;
+  gap: 1.5rem;
+  height: 64px;
+  justify-content: space-between;
+  left: 0;
+  padding: 0 2rem;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 50;
 }
 
-@media (max-width:873px){
-    #img-id{
-        width: 30px;
-        height: 24px;
-    }
-    #youtube-head{
-        font-size: 1.2rem;
-    }
-    .sec-3{
-        margin-right: 0.8rem;
-    }
-    #sec3-button{
-        padding: 0.3rem 0.8rem;
-    }
-}
-@media (max-width:797px){
-    #img-id{
-        width: 27px;
-        height: 22px;
-    }
-    #youtube-head{
-        font-size: 1rem;
-    }
-    .sec-3{
-        margin-right: 0.6rem;
-    }
-    #sec3-button{
-        padding: 0.3rem 0.7rem;
-    }
-    #img-container{
-        margin-left: 0.4rem;
-    }
-}
-@media (max-width:701px){
-    #img-id{
-        width: 27px;
-        height: 22px;
-    }
-    #youtube-head{
-        font-size: 1rem;
-    }
-    .sec-3{
-        margin-right: 0.5rem;
-    }
-    #sec3-button{
-        padding: 0.3rem 0.7rem;
-    }
-    #img-container{
-        margin-left: 0.3rem;
-    }
-    #signin-text{
-        font-size: 0.9rem;
-    }
-}
-@media (max-width:658px){
-    #img-id{
-        width: 27px;
-        height: 22px;
-    }
-    #youtube-head{
-        font-size: 0.8rem;
-    }
-    .sec-3{
-        margin-right: 0.5rem;
-    }
-    #sec3-button{
-        padding: 0.2rem 0.6rem;
-    }
-    #img-container{
-        margin-left: 0.3rem;
-    }
-    #signin-text{
-        font-size: 0.8rem;
-    }
-    #menu-margin{
-        margin-right: 0rem;
-    }
-}
-@media (max-width:588px){
-    #img-id{
-        width: 22px;
-        height: 18px;
-    }
-    #youtube-head{
-        font-size: 0.7rem;
-    }
-    .sec-2{
-        height:1.56;
-        width: 40%;
-    }
-    .sec-3{
-        margin-right: 0.5rem;
-    }
-    #sec3-button{
-        /* background-color: red; */
-        border: none;
-        padding: none;
-        margin-right: -15px;
-    }
-    #img-container{
-        margin-left: 0.3rem;
-    }
-    #signin-text{
-        font-size: 0.6rem;
-        display: none;
-    }
-    #menu-margin{
-        margin-right: 0rem;
-    }
-    #dot-icon{
-        margin-right: -12px;
-    }
-    #input-id{
-        width: 80%;
-        outline: none;
-    }
-    #search-btn{
-        width: 20%;
-    }
-    .sec-1{
-        margin-left: -10px;
-    }
-}
-@media (max-width:461px){
-    .header-sec{
-        align-items: center;
-    }
-    #img-id{
-        width: 22px;
-        height: 18px;
-    }
-    #youtube-head{
-        font-size: 0.7rem;
-    }
-    .sec-2{
-        margin-top: 3px;
-        height:1.64rem;
-        width: 48%;
-        font-size: 0.78rem;
-    }
-    .sec-3{
-        margin-right: 0.5rem;
-    }
-    #sec3-button{
-        /* background-color: red; */
-        border: none;
-        padding: none;
-        margin-right: -15px;
-    }
-    #img-container{
-        margin-left: -4px;
-    }
-    #signin-text{
-        font-size: 0.6rem;
-        display: none;
-    }
-    #menu-margin{
-        margin-right: 0rem;
-    }
-    #dot-icon{
-        margin-right: -12px;
-    }
-    #input-id{
-        width: 80%;
-        outline: none;
-        padding-left: 0.4rem;
-    }
-    #search-btn{
-        width: 20%;
-    }
-    .sec-1{
-        margin-left: -14px;
-    }
+.header-brand,
+.brand-link,
+.header-account {
+  align-items: center;
+  display: flex;
 }
 
-@media (max-width:1309px){
-    #drop-down{
-        overflow-y: scroll;
-    }
-}
-@media (max-width:1055px){
-    #drop-down{
-        width: 30%;
-    }
-}
-@media (max-width:855px){
-    #drop-down{
-        width: 38%;
-    }
+.header-brand { gap: 1rem; min-width: 190px; }
+.brand-link { color: #f1f1f1; font-size: 1.35rem; font-weight: 600; gap: 0.4rem; letter-spacing: -0.06em; }
+.brand-link img { height: 28px; object-fit: contain; width: 34px; }
+.header-icon-button { align-items: center; background: transparent; border: 0; border-radius: 50%; color: #f1f1f1; cursor: pointer; display: inline-flex; height: 40px; justify-content: center; width: 40px; }
+.header-icon-button:hover { background: #272727; }
+.header-search { border: 1px solid #383838; border-radius: 999px; display: flex; height: 42px; max-width: 680px; overflow: hidden; width: min(52vw, 680px); }
+.header-search:focus-within { border-color: #3b82f6; }
+.header-search input { background: #121212; border: 0; color: #f1f1f1; flex: 1; min-width: 0; outline: 0; padding: 0 1.1rem; }
+.header-search input::placeholder { color: #aaa; }
+.header-search button { align-items: center; background: #222; border: 0; color: #f1f1f1; cursor: pointer; display: flex; justify-content: center; width: 64px; }
+.header-search button:hover { background: #333; }
+.header-account { gap: 0.45rem; justify-content: flex-end; min-width: 190px; position: relative; }
+.avatar-button,
+.account-avatar { align-items: center; background: #c62828; border: 0; border-radius: 50%; color: white; display: inline-flex; font-size: 1rem; font-weight: 700; height: 36px; justify-content: center; width: 36px; }
+.avatar-button { cursor: pointer; }
+.sign-in-link { align-items: center; border: 1px solid #555; border-radius: 999px; color: #d7e7ff; display: inline-flex; gap: 0.4rem; padding: 0.45rem 0.8rem; }
+.sign-in-link:hover { background: #1d2631; }
+.account-menu { background: #282828; border: 1px solid #3f3f3f; border-radius: 14px; box-shadow: 0 10px 35px #0008; min-width: 280px; padding: 1rem; position: absolute; right: 0; top: 48px; }
+.account-summary { align-items: flex-start; border-bottom: 1px solid #444; display: flex; gap: 0.8rem; padding-bottom: 1rem; }
+.account-summary > div { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.account-summary span:not(.account-avatar) { color: #aaa; font-size: 0.82rem; overflow-wrap: anywhere; }
+.account-summary a { color: #9ac7ff; font-size: 0.9rem; margin-top: 0.3rem; }
+.account-menu > button { align-items: center; background: none; border: 0; color: #eee; cursor: pointer; display: flex; gap: 0.8rem; margin-top: 0.7rem; padding: 0.65rem 0.2rem; text-align: left; width: 100%; }
+.account-menu > button:hover { color: #ff7777; }
+
+@media (max-width: 700px) {
+  .app-header { gap: 0.6rem; padding: 0 0.7rem; }
+  .header-brand { gap: 0.2rem; min-width: auto; }
+  .brand-link { font-size: 1rem; }
+  .brand-link img { height: 24px; width: 28px; }
+  .header-search { height: 38px; width: auto; flex: 1; }
+  .header-search button { width: 44px; }
+  .header-account { min-width: auto; }
+  .more-button { display: none; }
+  .sign-in-link { padding: 0.35rem; }
+  .sign-in-link span { display: none; }
 }
 
-@media (max-width:655px){
-    #drop-down{
-        width: 48%;
-    }
-}
-@media (max-width:455px){
-    #drop-down{
-        width: 58%;
-        
-    }
-
+@media (max-width: 390px) {
+  .brand-link span { display: none; }
 }

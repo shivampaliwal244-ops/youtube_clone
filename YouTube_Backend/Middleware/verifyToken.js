@@ -1,25 +1,31 @@
-import jwt from 'jsonwebtoken';
-import userModel from '../Model/User.model.js';
-export function verifyToken(req, res, next) {
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(" ")[0] == 'JWT') {
-        jwt.verify(req.headers.authorization.split(" ")[1],"secretkey",function(err,verifiedToken){
-            if(err){
-                return res.status(403).send({"message":"invalid Token"});
-            } 
-            userModel.findById(verifiedToken.id).then((user)=>{
-                // console.log(user);
-                console.log(verifiedToken.id)
-                console.log(req.headers.authorization.split(" ")[1])
-                next();
-            }).catch((err)=>{
-                res.status(500).send({message:err.message})
-            })
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import userModel from "../Model/User.model.js";
 
+export async function verifyToken(req, res, next) {
+    const authorization = req.headers.authorization || "";
+    const [scheme, token] = authorization.split(" ");
+    const secret = process.env.JWT_SECRET;
 
-        })
+    if (!secret) return res.status(503).json({ message: "Authentication is not configured." });
+    if (!token || !["Bearer", "JWT"].includes(scheme)) {
+        return res.status(401).json({ message: "Please sign in to continue." });
     }
-    else{
-        res.status(404).send({"message":"Token not present"});
+    if (mongoose.connection.readyState !== 1) {
+        return res.status(503).json({ message: "Authentication is temporarily unavailable." });
     }
 
+    try {
+        const payload = jwt.verify(token, secret);
+        const user = await userModel.findById(payload.id).select("userName userEmail");
+        if (!user) return res.status(401).json({ message: "Your session is no longer valid. Please sign in again." });
+        req.user = {
+            id: user._id.toString(),
+            name: user.userName,
+            email: user.userEmail
+        };
+        return next();
+    } catch {
+        return res.status(401).json({ message: "Your session is invalid or expired. Please sign in again." });
+    }
 }

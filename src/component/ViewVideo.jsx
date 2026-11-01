@@ -1,109 +1,172 @@
-import Sidebar from "./SideBar";
-import { useOutletContext } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { dataInfo } from "../utils/dummyData";
-import SuggestedVideo from "./SuggestedVideo";
-import PersonIcon from '@mui/icons-material/Person';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ShareIcon from '@mui/icons-material/Share';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import LinearScaleIcon from '@mui/icons-material/LinearScale';
-import { useState,useEffect } from "react";
-import CommentSection from "./CommentSection";
-import './ViewVideo.css'
-import ShimmerView from "./ShimmerViewVideo";
-function ViewVideo(){
-   const [video_details,setVideoDetails]=useState([]);
-   const [filteredData,setFilteredData]=useState('');
-    const { flag, titleName } = useOutletContext();
-   
-    let video_id=useParams().id;
-    console.log(video_id);
+import { useEffect, useMemo, useState } from "react";
+import { Link, useOutletContext, useParams } from "react-router-dom";
+import PersonIcon from "@mui/icons-material/Person";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ShareIcon from "@mui/icons-material/Share";
+import Sidebar from "./SideBar.jsx";
+import SuggestedVideo from "./SuggestedVideo.jsx";
+import CommentSection from "./CommentSection.jsx";
+import { apiRequest, formatPublishedDate } from "../utils/api.js";
+import "./ViewVideo.css";
 
-    useEffect(()=>{
-      fetchdata()
-    },[])
-    async function fetchdata(){
-      let response=await fetch('http://localhost:3000');
-      let data=await response.json();
-      console.log(data)
-      setVideoDetails(data);
-      // set_dummy_VideoDetails(data)
-      console.log(video_details)
-       
+function getEmbedUrl(video) {
+  if (!video) return "";
+  let id = video.source === "youtube" ? video.videoId : "";
+  if (!id && video.embed_url) {
+    try {
+      const url = new URL(video.embed_url);
+      if (url.hostname === "youtu.be") id = url.pathname.slice(1);
+      else if (url.pathname.startsWith("/embed/")) id = url.pathname.split("/")[2];
+      else id = url.searchParams.get("v") || "";
+    } catch {
+      return "";
     }
-    useEffect(() => {
-      if (video_details.length > 0) {
-         const filtered = video_details.filter((item) => item._id === video_id);
-         setFilteredData(filtered);
-      }
-   }, [video_details, video_id]);
+  }
+  if (!/^[a-zA-Z0-9_-]{11}$/.test(id || "")) return "";
+  return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+}
 
-  
+function ViewVideo() {
+  const { id: videoId } = useParams();
+  const { flag: collapsed = false } = useOutletContext() || {};
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [playbackError, setPlaybackError] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [shareMessage, setShareMessage] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setVideo(null);
+    setError("");
+    setPlaybackError(false);
+    setLiked(false);
+    setDisliked(false);
+    setSubscribed(false);
+    setLoading(true);
+
+    apiRequest(`/api/videos/details/${encodeURIComponent(videoId)}`, { signal: controller.signal })
+      .then((data) => setVideo(data.video || null))
+      .catch((requestError) => {
+        if (requestError.name !== "AbortError") setError(requestError.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [videoId]);
+
+  const embedUrl = useMemo(() => getEmbedUrl(video), [video]);
+  const videoDate = formatPublishedDate(video?.publishedAt);
+
+  async function shareVideo() {
+    const url = window.location.href;
+    try {
+      if (navigator.share) await navigator.share({ title: video.title, url });
+      else {
+        await navigator.clipboard.writeText(url);
+        setShareMessage("Link copied");
+        window.setTimeout(() => setShareMessage(""), 2200);
+      }
+    } catch (shareError) {
+      if (shareError.name !== "AbortError") setShareMessage("Could not share this link");
+    }
+  }
+
+  if (loading) {
     return (
-        <>
-         {flag?'':<Sidebar/>}
-         
-         <div id='video_view' className="flex">
-          { filteredData && filteredData.length > 0 ?
-          <div id='video' className="ml-[2rem] mr-8 my-[4.8rem] w-[65%] ">
-        
-            <iframe  id='height' src={`${filteredData[0].video_url}&autoplay=1&mute=0`}   className="rounded-[14px] w-[100%] h-[80vh]" ></iframe>
-            <div className="pb-3 border-b border-gray-600" >
-                <div className="mt-3">
-                    <h1 id='head-des' className="text-[1.2rem] font-bold text-white">{filteredData[0].description}</h1>
+      <>
+        <Sidebar />
+        <main className={`watch-page ${collapsed ? "watch-collapsed" : ""}`}>
+          <div className="watch-loading-player" />
+          <div className="watch-loading-line" />
+        </main>
+      </>
+    );
+  }
+
+  if (!video) {
+    return (
+      <>
+        <Sidebar />
+        <main className={`watch-page ${collapsed ? "watch-collapsed" : ""}`}>
+          <div className="watch-error" role="alert">
+            <h1>Video unavailable</h1>
+            <p>{error || "This video could not be found."}</p>
+            <Link to="/">Back to home</Link>
+          </div>
+        </main>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Sidebar />
+      <main className={`watch-page ${collapsed ? "watch-collapsed" : ""}`}>
+        <div className="watch-layout">
+          <section className="watch-primary" aria-label="Video player and details">
+            <div className="player-frame">
+              {!video.embeddable || !embedUrl || playbackError ? (
+                <div className="player-unavailable">
+                  {video.thumbnail && <img src={video.thumbnail} alt="" />}
+                  <div>
+                    <h2>Playback is unavailable here</h2>
+                    <p>This video may be private, removed, or have embedding disabled.</p>
+                    {video.video_url && <a href={video.video_url} target="_blank" rel="noreferrer">Open on YouTube</a>}
+                  </div>
                 </div>
-                 <div id='like-dislike' className="flex justify-between">
-                  <div id='flex' className="flex items-center text-white">
-                      <span>
-                      <PersonIcon className='border border-red-100 rounded-full text-white'/>
-                      </span>
-                       <div id='owner' className="flex flex-col   mt-3 ml-2">
-                          <h1 className="font-bold">{filteredData[0].owner}</h1>
-                          <h2 className="text-[0.7rem]">{filteredData[0]._id.slice(0,3)} Subscribers</h2>
-                       </div>
-                       <button id='subscribe-btn' className="ml-8 bg-[#f1f1f1] text-[#000] font-bold px-6 py-2 rounded-[1.3rem] hover:bg-[#ff0000] hover:text-white">Subscribe</button>
-                    </div>
-                    <div id='flex2' className="text-white flex justify-center items-center">
-                        <button id='div-nesting-of-like_dislike' className=" text-[0.8rem] bg-[#272727]  py-[0.4rem] px-4    mr-2 rounded-[1.2rem]  ">
-                           <span id='like-btn' className="px-1 hover:text-[#00ff00] border-r border-white">
-                              <ThumbUpIcon sx={{ fontSize: '1.5rem' }}/>
-                           </span>
-                           <span id='dislike-btn' className="px-1 hover:text-[#ff0000]">
-                                <ThumbDownAltIcon sx={{ fontSize: '1.5rem' }}/>
-                           </span>
-                        </button>
-                        <button id='share-btn' className="px-3 text-[0.9rem] py-2 flex justify-center items-center bg-[#272727] hover:bg-[#ff0000]   mr-2  rounded-[1.2rem]">
-                          <ShareIcon/> <span className="font-bold">Share</span>
-                        </button>
-                        <button id='download-btn' className="px-3 text-[0.9rem] flex justify-center items-center py-2 bg-[#272727] hover:bg-[#ff0000]  mr-2 rounded-[1.2rem]">
-                          <span className="font-bold">
-                            <ArrowDownwardIcon/> Download
-                          </span>
-                        </button>
-                        <button id='three-dot' className="px-1 flex justify-center items-center py-1 bg-[#272727] rounded-full hover:bg-[#ff0000]" ><LinearScaleIcon/>
-                        </button>
-                    </div>
-                    
-                 </div>
+              ) : (
+                <iframe
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  onError={() => setPlaybackError(true)}
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  src={embedUrl}
+                  title={video.title}
+                />
+              )}
             </div>
-            <div className="bg-[#292929] text-white mt-3 rounded-[0.6rem] p-4">
-               <h1 className="text-[0.9rem] font-medium">{filteredData[0].views} <span className=' ml-3'>{filteredData[0].time}</span></h1>
-               <h3 className="text-[0.96rem]">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis pariatur nisi facilis eaque sequi fuga tempore delectus temporibus eum ducimus quam itaque rerum autem, ullam velit minus tempora. Error, ipsam?...More</h3>
+
+            <h1 className="watch-title">{video.title}</h1>
+            <div className="watch-actions-row">
+              <div className="watch-channel">
+                <span className="watch-channel-avatar"><PersonIcon /></span>
+                <div><strong>{video.owner}</strong><span>Channel</span></div>
+                <button className={`subscribe-button ${subscribed ? "subscribed" : ""}`} onClick={() => setSubscribed((value) => !value)} type="button">
+                  {subscribed ? "Subscribed" : "Subscribe"}
+                </button>
+              </div>
+              <div className="watch-actions">
+                <div className="vote-group">
+                  <button aria-pressed={liked} className={liked ? "selected" : ""} onClick={() => { setLiked((value) => !value); setDisliked(false); }} type="button"><ThumbUpIcon fontSize="small" /> <span>Like</span></button>
+                  <button aria-label="Dislike" aria-pressed={disliked} className={disliked ? "selected" : ""} onClick={() => { setDisliked((value) => !value); setLiked(false); }} type="button"><ThumbDownAltIcon fontSize="small" /></button>
+                </div>
+                <button className="watch-action-button" onClick={shareVideo} type="button"><ShareIcon fontSize="small" /> Share</button>
+                {shareMessage && <span className="share-feedback" role="status">{shareMessage}</span>}
+              </div>
             </div>
-            <div className="comment-section">
-              <CommentSection/>
+
+            <div className="watch-description">
+              <div className="watch-description-meta"><strong>{video.views}</strong>{videoDate && <span>{videoDate}</span>}</div>
+              <p>{video.description || "No description provided."}</p>
             </div>
-              
-          </div>:<ShimmerView/>
+
+            <CommentSection />
+          </section>
+
+          <aside className="watch-suggestions" aria-label="Suggested videos">
+            <SuggestedVideo videoId={video.videoId} title={video.title} category={video.genre} />
+          </aside>
+        </div>
+      </main>
+    </>
+  );
 }
-          <div id='video_suggestion' className="w-[35%] ml-[-15px] my-[4.8rem]">
-          <SuggestedVideo/>
-          </div>
-         
-          </div>
-        </>
-    )
-}
+
 export default ViewVideo;

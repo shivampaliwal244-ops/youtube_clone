@@ -1,34 +1,41 @@
-import './ShowCard.css';
-import PersonIcon from '@mui/icons-material/Person';
-import { Link } from 'react-router-dom';
-import CircleIcon from '@mui/icons-material/Circle';
-function ShowCard(props){
-    // console.log(props)
-    return (
-        <>
+/* eslint-disable react/prop-types */
+import { Link } from "react-router-dom";
+import PersonIcon from "@mui/icons-material/Person";
+import { formatPublishedDate } from "../utils/api.js";
+import "./ShowCard.css";
 
-            <Link to={`/viewing_video/${props.video._id}`}><div className="item text-white">
-                <img src={props.video.imageIcon} alt="" id='img-size' className='rounded-[8px]'/>
-                <div className='flex gap-2 mt-3'>
-                    <div>
-                        <PersonIcon className='border border-red-100 rounded-full'/>
-                    </div>
-                    <div className='text-[0.8rem]'>
-                       <h2 className='font-bold'>{props.video.description}</h2>
-                       <h2 className='font-light text-[#8a8888] mt-1'>{props.video.owner}</h2>
-                       <div className='flex gap-3 text-[#928e8e]'>
-                       <span>{props.video.views}</span>
-                       <span className="ml-[2px] mr-[-8px]"><CircleIcon sx={{ fontSize: '0.4rem' }} /></span>
-                       <span>{props.video.time}</span>
-                       </div>
-                       
-                    </div>
-                </div>
-            
-            </div>
-            </Link>
-        
-        </>
-    )
+function ShowCard({ video }) {
+  const videoId = video.videoId || video._id;
+  const title = video.title || video.description || "Untitled video";
+  const thumbnail = video.thumbnail || video.imageIcon;
+  const published = video.time || formatPublishedDate(video.publishedAt);
+
+  if (!videoId) return null;
+
+  return (
+    <article className="video-card">
+      <Link aria-label={`Watch ${title}`} className="video-thumbnail-link" to={`/watch/${encodeURIComponent(videoId)}`}>
+        <img
+          alt={title}
+          className="video-thumbnail"
+          loading="lazy"
+          src={thumbnail || "https://placehold.co/640x360/181818/aaa?text=Video"}
+        />
+        {video.source === "library" && <span className="video-source">Library</span>}
+      </Link>
+      <div className="video-card-info">
+        <div className="channel-avatar" aria-hidden="true"><PersonIcon fontSize="small" /></div>
+        <div className="video-card-copy">
+          <Link className="video-title" title={title} to={`/watch/${encodeURIComponent(videoId)}`}>{title}</Link>
+          <span className="video-channel">{video.owner || "Unknown channel"}</span>
+          <div className="video-metadata">
+            <span>{video.views || "Views unavailable"}</span>
+            {published && <><span className="metadata-dot">·</span><span>{published}</span></>}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
 }
+
 export default ShowCard;

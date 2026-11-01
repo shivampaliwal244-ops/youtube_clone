@@ -1,61 +1,10 @@
-@media (max-width:1200px){
-    #header-channel{
-        width: 7rem;
-        height: 7rem;
-        font-size: 6rem;
-    }
-}
-@media (max-width:700px){
-    #header-channel{
-        width: 5rem;
-        height: 5rem;
-        font-size: 2rem;
-    }
-    #header-second{
-        width: 70%;
-        /* background-color: yellow; */
-        font-size: 0.5rem;
-        padding: 0.2rem 0.9rem;
-    }
-    #name-second{
-        font-size: 1rem;
-    }
-}
-@media (max-width:500px){
-    #upper-container{
-        width: 100%;
-    }
-    #header-channel{
-        width: 5rem;
-        height: 5rem;
-        font-size: 2rem;
-    }
-    #header-second{
-        width: 98%;
-        /* background-color: yellow; */
-        font-size: 0.4rem;
-        padding: 0.2rem 0.9rem;
-    }
-    #name-second{
-        font-size: 1.4rem;
-    }
-}
-@media (max-width:500px){
-    #upper-container{
-        width: 100%;
-    }
-    #header-channel{
-        width: 4rem;
-        height: 4rem;
-        font-size: 2rem;
-    }
-    #header-second{
-        width: 98%;
-        /* background-color: yellow; */
-        font-size: 0.4rem;
-        padding: 0.2rem 0.9rem;
-    }
-    #name-second{
-        font-size: 1.4rem;
-    }
-}
+.channel-page { margin-left: 220px; min-height: 100vh; padding: 100px 2rem 2rem; }
+.channel-page.channel-collapsed { margin-left: 76px; }
+.channel-card { align-items: center; border-bottom: 1px solid #383838; display: flex; gap: 1.5rem; margin: 0 auto; max-width: 900px; padding: 1rem 0 2rem; }
+.channel-large-avatar { align-items: center; background: #c62828; border-radius: 50%; display: flex; flex: 0 0 132px; font-size: 4rem; height: 132px; justify-content: center; }
+.channel-card h1, .channel-signin h1 { font-size: 1.8rem; font-weight: 700; }
+.channel-card p, .channel-signin p { color: #aaa; margin-top: 0.4rem; }
+.channel-card .channel-description { margin-top: 1rem; }
+.channel-signin { align-items: center; display: flex; flex-direction: column; gap: 0.7rem; justify-content: center; min-height: 55vh; text-align: center; }
+.channel-signin a { background: #d32f2f; border-radius: 999px; font-weight: 700; margin-top: 0.5rem; padding: 0.65rem 1.2rem; }
+@media (max-width: 700px) { .channel-page, .channel-page.channel-collapsed { margin-left: 0; padding: 86px 1rem 2rem; } .channel-large-avatar { flex-basis: 82px; font-size: 2.5rem; height: 82px; } .channel-card h1, .channel-signin h1 { font-size: 1.4rem; } }
